@@ -1,0 +1,28 @@
+# hekad setup and nginx parsing stuff is part of the standard ops config
+
+[LandfillOutput]
+type = "S3SplitFileOutput"
+path = "/media/ephemeral0/landfill"
+encoder = "ProtobufEncoder"
+use_framing = true
+message_matcher = "Type =~ /NginxAccess/"
+flush_interval = 5000
+max_file_size = <%= @max_file_size %>
+max_file_age = <%= @max_file_age %>
+schema_file = "/usr/share/heka/schema/schema.http_edge_raw.json"
+s3_bucket = "<%= @s3_bucket %>"
+s3_bucket_prefix = "download-stats"
+aws_region = "<%= scope.lookupvar('::ec2_region') %>"
+
+[NginxRedshiftOutput]
+type = "SandboxFilter"
+filename = "lua_filters/nginx_redshift.lua"
+message_matcher = "Type =~ /NginxAccess/"
+ticker_interval = 0
+
+[HindsightOutput]
+type = "TcpOutput"
+address = "127.0.0.1:5565"
+message_matcher = "Logger == 'NginxRedshiftOutput'"
+encoder = "ProtobufEncoder"
+use_framing = true

@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dimensions": [
+    {
+      "field_name": "Host",
+      "allowed_values": "*"
+    },
+    {
+      "field_name": "submissionDate",
+      "allowed_values": "*"
+    }
+  ]
+}
