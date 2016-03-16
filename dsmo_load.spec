@@ -12,6 +12,8 @@ Requires:       luasandbox-core
 Requires:       hindsight
 Requires:       heka
 
+BuildRequires: systemd-units
+
 %pre
 ldconfig
 
@@ -25,6 +27,8 @@ Generates Redshift derived streams from download-stats.mozilla.org server logs.
 mkdir -p '%{buildroot}/opt/%{name}/'
 cp -aR hindsight '%{buildroot}/opt/%{name}/'
 cp -aR heka/* '%{buildroot}/'
+mkdir -p '%{buildroot}/%{_unitdir}'
+cp %{name}.service '%{buildroot}/%{_unitdir}/'
 
 %clean
 rm -rf '%{buildroot}'
@@ -34,3 +38,4 @@ rm -rf '%{buildroot}'
 /opt/%{name}/
 /usr/share/heka/
 /etc/heka.d/
+%{_unitdir}/

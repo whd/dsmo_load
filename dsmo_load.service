@@ -1,0 +1,12 @@
+[Unit]
+Description=dsmo_load
+After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/hindsight /opt/hindsight/etc/hindsight.cfg
+Restart=always
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target
