@@ -4,7 +4,7 @@ After=syslog.target network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/hindsight /opt/hindsight/etc/hindsight.cfg
+ExecStart=/usr/bin/hindsight /opt/dsmo_load/hindsight/etc/hindsight.cfg
 Restart=always
 StartLimitInterval=0
 
