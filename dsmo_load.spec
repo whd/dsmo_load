@@ -1,7 +1,6 @@
 Name:           dsmo_load
 Version:        0.1
-# Release:        %{release}
-Release:        1
+Release:        %{release}
 Summary:        %{name}
 
 License:        MPL 2.0
@@ -36,6 +35,7 @@ rm -rf '%{buildroot}'
 %files
 %defattr(-,root,root,-)
 /opt/%{name}/
-/usr/share/heka/
-/etc/heka.d/
-%{_unitdir}/
+/etc/heka.d/dsmo_load.toml
+/usr/share/heka/schema/schema.http_edge_raw.json
+/usr/share/heka/lua_filters/nginx_redshift.lua
+%{_unitdir}/%{name}.service
