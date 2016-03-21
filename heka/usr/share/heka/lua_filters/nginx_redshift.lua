@@ -57,7 +57,7 @@ function process_message()
     if type(request.value[1]) ~= "string" then return -1, "request not a string" end
 
     -- http://download-stats.mozilla.org stripped off by nginx decoder
-    fields = grammar:match(request.value[1]:match("GET /(.*) HTTP/%d+.%d+"))
+    fields = grammar:match(request.value[1]:match("GET /(.*) HTTP/%d+.%d+") or "")
     if not fields or fields[1] ~= "stub" or fields[2] ~= "v6" then
         return -1, "ping doesn't look to be of the correct form: " .. request.value[1]
     end
