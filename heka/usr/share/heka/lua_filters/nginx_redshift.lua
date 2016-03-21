@@ -125,7 +125,7 @@ function process_message()
     -- [Opened the download page for the full installer?]/
     update_field(msg.Fields, "manual_download",               fields[27] == "1")
     -- [Did a Firefox profile directory already exist before this installation?]/
-    update_field(msg.Fields, "has_old_install",               fields[28] == "1")
+    update_field(msg.Fields, "had_old_install",               fields[28] == "1")
     -- [Version of an existing Firefox that this install is replacing]/
     update_field(msg.Fields, "old_version",                   fields[29])
     -- [BuildID of an existing Firefox that this install is replacing]/
