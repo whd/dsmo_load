@@ -84,7 +84,7 @@ function process_message()
     -- [OS is Windows Server?]/
     update_field(msg.Fields, "server_os",    fields[12] == "1")
     -- [Installer exit code]/ (footnote [1])
-    local exit_code = fields[13]
+    local exit_code = tonumber(fields[13])
     update_field(msg.Fields, "succeeded",          exit_code == 0)
     update_field(msg.Fields, "download_cancelled", exit_code == 10)
     update_field(msg.Fields, "out_of_retries",     exit_code == 11)
@@ -93,7 +93,7 @@ function process_message()
     update_field(msg.Fields, "sig_unexpected",     exit_code == 22 or exit_code == 23)
     update_field(msg.Fields, "install_timeout",    exit_code == 30)
     -- [Launch code]/ (footnote [2])
-    local launch_code =                                       fields[14]
+    local launch_code = tonumber(fields[14])
     update_field(msg.Fields, "new_launched", launch_code == 2)
     update_field(msg.Fields, "old_running", launch_code == 1)
     -- [Download retry count]/ (0 if first try succeeded)
@@ -119,7 +119,7 @@ function process_message()
     -- [Seconds spent in finish phase]/
     update_field(msg.Fields, "finish_time",         tonumber(fields[25]))
     -- [Initial install requirements code]/ (footnote [3])
-    local iirc =                                              fields[26]
+    local iirc = tonumber(fields[26])
     update_field(msg.Fields, "disk_space_error", iirc == 1)
     update_field(msg.Fields, "no_write_access", iirc == 2)
     -- [Opened the download page for the full installer?]/
@@ -139,11 +139,11 @@ function process_message()
     -- [Does user have admin access?]/
     update_field(msg.Fields, "admin_user",                    fields[34] == "1")
     -- [Default browser status code]/ (footnote [4])
-    local status_code = tonumber(                             fields[35])
+    local status_code = tonumber(fields[35])
     update_field(msg.Fields, "new_default", status_code == 1)
     update_field(msg.Fields, "old_default", status_code == 2)
     -- [Default browser setting code]/ (footnote [5])
-    local setting_code = tonumber(                            fields[36])
+    local setting_code = tonumber(fields[36])
     update_field(msg.Fields, "set_default", setting_code == 2)
     -- [IP address of the download server that was used]
     update_field(msg.Fields, "download_ip",                   fields[37])
