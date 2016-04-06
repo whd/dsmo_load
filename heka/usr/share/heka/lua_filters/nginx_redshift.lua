@@ -158,6 +158,9 @@ function process_message()
     -- remove the original request
     update_field(msg.Fields, "request", nil)
 
+    -- explicitly mark error field as false
+    update_field(msg.Fields, "error", false)
+
     local ok, err = pcall(inject_message, msg)
     if not ok then
         return -1, err
