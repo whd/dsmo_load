@@ -59,7 +59,14 @@ function process_message()
     -- http://download-stats.mozilla.org stripped off by nginx decoder
     fields = grammar:match(request.value[1]:match("GET /(.*) HTTP/%d+.%d+") or "")
     if not fields or fields[1] ~= "stub" or fields[2] ~= "v6" then
-        return -1, "ping doesn't look to be of the correct form: " .. request.value[1]
+        update_field(msg.Fields, "error", true)
+
+        local ok, err = pcall(inject_message, msg)
+        if not ok then
+            return -1, err
+        end
+
+        return 0
     end
 
     -- [Build channel]/
