@@ -58,7 +58,7 @@ function process_message()
 
     -- http://download-stats.mozilla.org stripped off by nginx decoder
     fields = grammar:match(request.value[1]:match("GET /(.*) HTTP/%d+.%d+") or "")
-    if not fields or fields[1] ~= "stub" or fields[2] ~= "v6" then
+    if not fields or fields[1] ~= "stub" or (fields[2] ~= "v6" and fields[2] ~= "v7") then
         update_field(msg.Fields, "error", true)
 
         local ok, err = pcall(inject_message, msg)
@@ -154,6 +154,11 @@ function process_message()
     update_field(msg.Fields, "set_default", setting_code == 2)
     -- [IP address of the download server that was used]
     update_field(msg.Fields, "download_ip",                   fields[37])
+
+    -- [Attribution data]/ (only in v7)
+    if fields[2] == "v7" then
+      update_field(msg.Fields, "attribution", fields[38])
+    end
 
     -- remove the original request
     update_field(msg.Fields, "request", nil)

@@ -50,6 +50,7 @@ local schema = {
     {"install_timeout"     , "BOOLEAN"   , nil    , nil,         "Fields[install_timeout]"    },
     {"new_launched"        , "BOOLEAN"   , nil    , nil,         "Fields[new_launched]"       },
     {"old_running"         , "BOOLEAN"   , nil    , nil,         "Fields[old_running]"        },
+    {"attribution"         , "VARCHAR"   , 256    , nil,         "Fields[attribution]"        },
 }
 
 process_message, timer_event = ds.load_schema(name, schema)
