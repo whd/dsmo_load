@@ -6,10 +6,8 @@ Summary:        %{name}
 License:        MPL 2.0
 Source0:        %{name}.tar.gz
 
-Requires:       postgresql-libs
-Requires:       luasandbox-core
-Requires:       hindsight
 Requires:       heka
+Requires:       data-pipeline
 
 BuildRequires: systemd-units
 
