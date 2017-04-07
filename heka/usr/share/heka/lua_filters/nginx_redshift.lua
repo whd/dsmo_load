@@ -18,7 +18,7 @@ require 'table'
 
 local l = require "lpeg"
 local sep = l.P"/"
-local elem = l.C((1 - sep)^1)
+local elem = l.C((1 - sep)^0)
 local grammar = l.Ct(elem * (sep * elem)^0)
 
 -- ripped from extract_telemetry_dimensions.lua
