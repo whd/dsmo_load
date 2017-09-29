@@ -70,7 +70,7 @@ function process_message()
     end
 
     local version = string.sub(fields[2], 1, 2)
-    if version ~= "v6" and version ~= "v7" then
+    if version ~= "v6" and version ~= "v7" and version ~= "v8" then
         update_field(msg.Fields, "error", true)
 
         local ok, err = pcall(inject_message, msg)
@@ -173,6 +173,13 @@ function process_message()
     -- [Attribution data]/ (only in v7)
     if fields[2] == "v7" then
       update_field(msg.Fields, "attribution", fields[38])
+    end
+
+    -- [ProfileCleanupPrompt]/
+    -- [ProfileCleanupRequested]/
+    if fields[2] == "v8" then
+        update_field(msg.Fields, "profile_cleanup_prompt", tonumber(fields[39]))
+        update_field(msg.Fields, "profile_cleanup_requested", fields[40] == "1")
     end
 
     -- remove the original request
