@@ -58,7 +58,7 @@ function process_message()
 
     -- http://download-stats.mozilla.org stripped off by nginx decoder
     fields = grammar:match(request.value[1]:match("GET /(.*) HTTP/%d+.%d+") or "")
-    if not fields or fields[1] ~= "stub" or (fields[2] ~= "v6" and fields[2] ~= "v7") then
+    if not fields or fields[1] ~= "stub" or type(fields[2]) ~= "string" then
         update_field(msg.Fields, "error", true)
 
         local ok, err = pcall(inject_message, msg)
@@ -68,6 +68,21 @@ function process_message()
 
         return 0
     end
+
+    local version = string.sub(fields[2], 1, 2)
+    if version ~= "v6" and version ~= "v7" then
+        update_field(msg.Fields, "error", true)
+
+        local ok, err = pcall(inject_message, msg)
+        if not ok then
+            return -1, err
+        end
+
+        return 0
+    end
+
+    update_field(msg.Fields, "ping_version", fields[2])
+    update_field(msg.Fields, "funnelcake", string.len(fields[2]) > 2)
 
     -- [Build channel]/
     update_field(msg.Fields, "build_channel",  fields[3])

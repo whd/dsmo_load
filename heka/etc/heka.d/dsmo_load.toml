@@ -5,7 +5,7 @@ type = "S3SplitFileOutput"
 path = "/media/ephemeral0/landfill"
 encoder = "ProtobufEncoder"
 use_framing = true
-message_matcher = "Type =~ /NginxAccess/"
+message_matcher = "Logger =~ /NginxAccess/"
 flush_interval = 5000
 max_file_size = <%= @max_file_size %>
 max_file_age = <%= @max_file_age %>
@@ -17,7 +17,7 @@ aws_region = "<%= scope.lookupvar('::ec2_region') %>"
 [NginxRedshiftOutput]
 type = "SandboxFilter"
 filename = "lua_filters/nginx_redshift.lua"
-message_matcher = "Type =~ /NginxAccess/"
+message_matcher = "Logger =~ /NginxAccess/ && Fields[http_user_agent] != 'ELB-HealthChecker/1.0'"
 ticker_interval = 0
 
 [HindsightOutput]
