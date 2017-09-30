@@ -17,7 +17,7 @@ aws_region = "<%= scope.lookupvar('::ec2_region') %>"
 [NginxRedshiftOutput]
 type = "SandboxFilter"
 filename = "lua_filters/nginx_redshift.lua"
-message_matcher = "Logger =~ /NginxAccess/"
+message_matcher = "Logger =~ /NginxAccess/ && Fields[http_user_agent] != 'ELB-HealthChecker/1.0'"
 ticker_interval = 0
 
 [HindsightOutput]
