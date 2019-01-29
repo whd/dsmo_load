@@ -21,6 +21,9 @@ local sep = l.P"/"
 local elem = l.C((1 - sep)^0)
 local grammar = l.Ct(elem * (sep * elem)^0)
 
+-- the version field can come in two formats, with or without an appended funnelcake
+-- normal: v7
+-- funnel: v7-123
 local version_grammar = "v" * l.C(l.digit^1) * ("-" * l.C(l.digit^1))^-1 * l.P(-1)
 
 -- ripped from extract_telemetry_dimensions.lua
