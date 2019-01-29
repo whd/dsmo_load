@@ -21,6 +21,11 @@ local sep = l.P"/"
 local elem = l.C((1 - sep)^0)
 local grammar = l.Ct(elem * (sep * elem)^0)
 
+-- the version field can come in two formats, with or without an appended funnelcake
+-- normal: v7
+-- funnel: v7-123
+local version_grammar = "v" * l.C(l.digit^1) * ("-" * l.C(l.digit^1))^-1 * l.P(-1)
+
 -- ripped from extract_telemetry_dimensions.lua
 -- telemetry messages should not contain duplicate keys so this function
 -- replaces/removes the first key that exists or adds a new key to the end
@@ -47,6 +52,11 @@ local function find_field(fields, name)
     end
 end
 
+local function parse_version(field)
+    local version, funnelcake = version_grammar:match(field)
+    return tonumber(version), tonumber(funnelcake)
+end
+
 function process_message()
     local raw = read_message("raw")
     local ok, msg = pcall(decode_message, raw)
@@ -69,8 +79,8 @@ function process_message()
         return 0
     end
 
-    local version = string.sub(fields[2], 1, 2)
-    if version ~= "v6" and version ~= "v7" and version ~= "v8" then
+    local version, funnelcake = parse_version(fields[2])
+    if not version or version < 6 or version > 8 then
         update_field(msg.Fields, "error", true)
 
         local ok, err = pcall(inject_message, msg)
@@ -82,7 +92,7 @@ function process_message()
     end
 
     update_field(msg.Fields, "ping_version", fields[2])
-    update_field(msg.Fields, "funnelcake", string.len(fields[2]) > 2)
+    update_field(msg.Fields, "funnelcake", funnelcake ~= nil)
 
     -- [Build channel]/
     update_field(msg.Fields, "build_channel",  fields[3])
@@ -170,14 +180,14 @@ function process_message()
     -- [IP address of the download server that was used]
     update_field(msg.Fields, "download_ip",                   fields[37])
 
-    -- [Attribution data]/ (only in v7)
-    if fields[2] == "v7" then
+    -- [Attribution data]/ (only in v7 and above)
+    if version >= 7 then
       update_field(msg.Fields, "attribution", fields[38])
     end
 
     -- [ProfileCleanupPrompt]/
     -- [ProfileCleanupRequested]/
-    if fields[2] == "v8" then
+    if version >= 8 then
         update_field(msg.Fields, "profile_cleanup_prompt", tonumber(fields[39]))
         update_field(msg.Fields, "profile_cleanup_requested", fields[40] == "1")
     end
