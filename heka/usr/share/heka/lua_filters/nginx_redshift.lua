@@ -17,6 +17,7 @@ require 'string'
 require 'table'
 
 local l = require "lpeg"
+l.locale(l)
 local sep = l.P"/"
 local elem = l.C((1 - sep)^0)
 local grammar = l.Ct(elem * (sep * elem)^0)
